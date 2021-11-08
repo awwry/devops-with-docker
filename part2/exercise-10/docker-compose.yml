@@ -1,0 +1,27 @@
+version: '3.5'
+
+services:
+  reverse-proxy:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+  frontend:
+    # The dockerfile for this image can be found from this directory.
+    # For this file to work, it should be 
+    # built with `docker build . -t example-frontend-exercise-8`.
+    image: example-frontend-exercise-8
+  backend:
+    image: example-backend
+    environment:
+      - REDIS_HOST=redis
+      - POSTGRES_HOST=database
+  redis:
+    image: redis
+    restart: unless-stopped
+  database:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
